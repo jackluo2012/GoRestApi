@@ -5,6 +5,7 @@
 # IntelliJ project files
 .idea
 *.iml
+.idea/vcs.xml
 out
 gen### Go template
 # Binaries for programs and plugins
