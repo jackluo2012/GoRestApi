@@ -94,13 +94,9 @@ func AuthRequired() gin.HandlerFunc {
 
 			return []byte(signingKey), nil
 		})
-
 		if err == nil {
 			if token.Valid {
-				fmt.Printf("\n token valid %s \n", token)
-
 				c.Next()
-
 			} else {
 				fmt.Print("Token is not valid \n")
 				c.AbortWithError(http.StatusUnauthorized, err)
@@ -121,7 +117,7 @@ func Login(c *gin.Context) {
 		context.Where("email = ?", loginModel.Email).First(&foundUser)
 		err := bcrypt.CompareHashAndPassword([]byte(foundUser.Password), []byte(loginModel.Password))
 
-		if foundUser.ID > 0 &&err != nil {
+		if foundUser.ID > 0 && err == nil {
 
 			token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
 				"exp": time.Now().Add(time.Minute * 30).Unix(),

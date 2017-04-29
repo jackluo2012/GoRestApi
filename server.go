@@ -3,7 +3,6 @@ package main
 import (
 	"github.com/gin-gonic/gin"
 	"vcelinServer/api"
-	"vcelinServer/db"
 )
 
 func main() {
@@ -12,7 +11,7 @@ func main() {
 	router.Use(gin.Recovery())
 
 	api.InitKeys()
-	db.InitDb()
+	//db.InitDb()
 
 	authorized := router.Group("/vcelin")
 	authorized.Use(api.AuthRequired())

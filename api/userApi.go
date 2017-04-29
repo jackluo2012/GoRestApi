@@ -33,7 +33,6 @@ func GetUsers(c *gin.Context) {
 	fmt.Printf("called method users %s",users)
 	if (len(users) <= 0) {
 		c.JSON(http.StatusNotFound, gin.H{"status" : http.StatusNotFound, "message" : "No todo found!"})
-		return
 	}
 
 	c.JSON(http.StatusOK, gin.H{"status" : http.StatusOK, "data" : users})
