@@ -13,8 +13,8 @@ import (
 	"crypto/x509"
 	"bytes"
 	cryptorand "crypto/rand"
-
 	"vcelinServer/db"
+	"strconv"
 )
 
 type LoginModel struct {
@@ -96,7 +96,30 @@ func AuthRequired() gin.HandlerFunc {
 		})
 		if err == nil {
 			if token.Valid {
-				c.Next()
+				var foundUser db.User
+				claims := token.Claims.(jwt.MapClaims)
+
+
+				//fmt.Printf("\n<"+claims["userId"].(string)+">\n")
+				if s, ok := strconv.ParseUint(claims["userId"].(string), 10, 32); ok == nil {
+					//fmt.Printf("%s, %v\n", fmt.Sprint(claims["userId"]), s)
+
+
+					foundUser.ID = uint(s)
+					context := db.Database()
+					defer context.Close()
+
+					context.First(&foundUser)
+					//fmt.Printf(fmt.Sprint(foundUser))
+					c.Set("User", foundUser)
+					c.Next()
+				} else {
+					c.AbortWithError(http.StatusUnauthorized, ok)
+
+				}
+
+
+
 			} else {
 				fmt.Print("Token is not valid \n")
 				c.AbortWithError(http.StatusUnauthorized, err)
@@ -123,11 +146,9 @@ func Login(c *gin.Context) {
 				"exp": time.Now().Add(time.Minute * 30).Unix(),
 				"iat": time.Now().Unix(),
 				"iss":"admin",
-				"alg":"HS265",
-				"CustomUserInfo": struct {
-					Name string
-					Role string
-				}{foundUser.Email, "Member"},
+				"alg":"hs256",
+				"userId":fmt.Sprint(foundUser.ID),
+				"role":"Member",
 			})
 
 			tokenString, err := token.SignedString([]byte(signingKey))
@@ -137,7 +158,7 @@ func Login(c *gin.Context) {
 				return
 			}
 
-			c.JSON(http.StatusOK, gin.H{"status": "you are logged in", "userEmail":loginModel, "token":tokenString})
+			c.JSON(http.StatusOK, gin.H{"status": "you are logged in", "email":loginModel.Email, "token":tokenString})
 		} else {
 			c.JSON(http.StatusUnauthorized, gin.H{"status": "unauthorized"})
 		}

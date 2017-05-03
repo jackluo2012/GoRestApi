@@ -3,6 +3,8 @@ package main
 import (
 	"github.com/gin-gonic/gin"
 	"vcelinServer/api"
+	_ "vcelinServer/db"
+	"vcelinServer/db"
 )
 
 func main() {
@@ -11,7 +13,7 @@ func main() {
 	router.Use(gin.Recovery())
 
 	api.InitKeys()
-	//db.InitDb()
+	db.InitDb()
 
 	authorized := router.Group("/vcelin")
 	authorized.Use(api.AuthRequired())
@@ -26,7 +28,11 @@ func main() {
 		authorized.GET("/api/users/:id", api.GetUser)
 		authorized.PUT("/api/users/:id", api.UpdateUser)
 		authorized.DELETE("/api/users/:id", api.DeleteUser)
-		authorized.POST("/api/logout", api.Logout)
+		authorized.POST("/api/comments", api.CreateComment)
+		authorized.GET("/api/comments", api.FetchAllComments)
+		authorized.GET("/api/comments/:id", api.FetchSingleComment)
+		authorized.PUT("/api/comments/:id", api.UpdateComment)
+		authorized.DELETE("/api/comments/:id", api.DeleteComment)
 	}
 
 	v1 := router.Group("/vcelin")

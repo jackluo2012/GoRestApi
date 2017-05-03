@@ -50,7 +50,7 @@ func InitDb() {
 }
 
 func Database() *gorm.DB {
-	db, err := gorm.Open("mysql", "root:adminmysqlpassword@tcp(192.168.0.23:3306)/vcelin?charset=utf8&parseTime=True&loc=Local")
+	db, err := gorm.Open("mysql", "root:adminmysqlpassword@tcp(localhost:3306)/vcelin?charset=utf8&parseTime=True&loc=Local")
 	if err != nil {
 		fmt.Printf("Error connecting to DB: <%s> \n", err)
 
