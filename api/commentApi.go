@@ -2,7 +2,7 @@ package api
 
 import (
 	"net/http"
-	"vcelinServer/db"
+	"vcelin/server/db"
 	"github.com/gin-gonic/gin"
 	"strconv"
 )

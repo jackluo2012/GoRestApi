@@ -2,9 +2,9 @@ package main
 
 import (
 	"github.com/gin-gonic/gin"
-	"vcelinServer/api"
-	_ "vcelinServer/db"
-	"vcelinServer/db"
+	"vcelin/server/api"
+	_ "vcelin/server/db"
+	"vcelin/server/db"
 )
 
 func main() {

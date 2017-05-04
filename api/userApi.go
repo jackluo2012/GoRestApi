@@ -3,7 +3,7 @@ package api
 import (
 	"github.com/gin-gonic/gin"
 	"net/http"
-	"vcelinServer/db"
+	"vcelin/server/db"
 	"strconv"
 )
 
